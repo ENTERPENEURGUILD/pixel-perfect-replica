@@ -88,7 +88,7 @@ export const STATUS_LABEL: Record<ModelStatus, string> = {
 };
 
 export function getModel(id: string): ImageModel {
-  return MODELS.find((m) => m.id === id) ?? MODELS[0];
+  return (MODELS.find((m) => m.id === id) ?? MODELS[0])!;
 }
 
 export interface CostInput {

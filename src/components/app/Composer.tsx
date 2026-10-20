@@ -50,7 +50,7 @@ function Control({
 
 export interface ComposerProps {
   placeholder?: string;
-  defaultAspect?: string;
+  defaultAspect?: string | undefined;
   /** Multiplies the per-run cost (e.g. number of campaign assets). */
   runs?: number;
   /** Additional fields rendered above the prompt. */
@@ -65,11 +65,11 @@ export function Composer({
   children,
   showReference = true,
 }: ComposerProps) {
-  const [modelId, setModelId] = useState(MODELS[0].id);
+  const [modelId, setModelId] = useState(MODELS[0]!.id);
   const model = getModel(modelId);
-  const [aspect, setAspect] = useState(defaultAspect ?? model.aspectRatios[0]);
+  const [aspect, setAspect] = useState(defaultAspect ?? model.aspectRatios[0]!);
   const [quality, setQuality] = useState<Quality>(model.qualities.at(-1)!);
-  const [resolution, setResolution] = useState<Resolution>(model.resolutions[0]);
+  const [resolution, setResolution] = useState<Resolution>(model.resolutions[0]!);
   const [count, setCount] = useState(1);
   const [prompt, setPrompt] = useState("");
   const [reference, setReference] = useState<File | null>(null);
@@ -77,9 +77,9 @@ export function Composer({
 
   // Keep selections valid for the current model's real capabilities.
   useEffect(() => {
-    if (!model.aspectRatios.includes(aspect)) setAspect(model.aspectRatios[0]);
+    if (!model.aspectRatios.includes(aspect)) setAspect(model.aspectRatios[0]!);
     if (!model.qualities.includes(quality)) setQuality(model.qualities.at(-1)!);
-    if (!model.resolutions.includes(resolution)) setResolution(model.resolutions[0]);
+    if (!model.resolutions.includes(resolution)) setResolution(model.resolutions[0]!);
     if (count > model.maxImages) setCount(model.maxImages);
     if (!model.supportsReference) setReference(null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
