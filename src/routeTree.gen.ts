@@ -10,33 +10,89 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as BrandingStudioRouteImport } from './routes/branding-studio'
+import { Route as CampaignsRouteImport } from './routes/campaigns'
+import { Route as CreatorStudioRouteImport } from './routes/creator-studio'
+import { Route as ProductStudioRouteImport } from './routes/product-studio'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BrandingStudioRoute = BrandingStudioRouteImport.update({
+  id: '/branding-studio',
+  path: '/branding-studio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CampaignsRoute = CampaignsRouteImport.update({
+  id: '/campaigns',
+  path: '/campaigns',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CreatorStudioRoute = CreatorStudioRouteImport.update({
+  id: '/creator-studio',
+  path: '/creator-studio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProductStudioRoute = ProductStudioRouteImport.update({
+  id: '/product-studio',
+  path: '/product-studio',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/branding-studio': typeof BrandingStudioRoute
+  '/campaigns': typeof CampaignsRoute
+  '/creator-studio': typeof CreatorStudioRoute
+  '/product-studio': typeof ProductStudioRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/branding-studio': typeof BrandingStudioRoute
+  '/campaigns': typeof CampaignsRoute
+  '/creator-studio': typeof CreatorStudioRoute
+  '/product-studio': typeof ProductStudioRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/branding-studio': typeof BrandingStudioRoute
+  '/campaigns': typeof CampaignsRoute
+  '/creator-studio': typeof CreatorStudioRoute
+  '/product-studio': typeof ProductStudioRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/branding-studio'
+    | '/campaigns'
+    | '/creator-studio'
+    | '/product-studio'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/branding-studio'
+    | '/campaigns'
+    | '/creator-studio'
+    | '/product-studio'
+  id:
+    | '__root__'
+    | '/'
+    | '/branding-studio'
+    | '/campaigns'
+    | '/creator-studio'
+    | '/product-studio'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  BrandingStudioRoute: typeof BrandingStudioRoute
+  CampaignsRoute: typeof CampaignsRoute
+  CreatorStudioRoute: typeof CreatorStudioRoute
+  ProductStudioRoute: typeof ProductStudioRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +104,43 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/branding-studio': {
+      id: '/branding-studio'
+      path: '/branding-studio'
+      fullPath: '/branding-studio'
+      preLoaderRoute: typeof BrandingStudioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/campaigns': {
+      id: '/campaigns'
+      path: '/campaigns'
+      fullPath: '/campaigns'
+      preLoaderRoute: typeof CampaignsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/creator-studio': {
+      id: '/creator-studio'
+      path: '/creator-studio'
+      fullPath: '/creator-studio'
+      preLoaderRoute: typeof CreatorStudioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/product-studio': {
+      id: '/product-studio'
+      path: '/product-studio'
+      fullPath: '/product-studio'
+      preLoaderRoute: typeof ProductStudioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  BrandingStudioRoute: BrandingStudioRoute,
+  CampaignsRoute: CampaignsRoute,
+  CreatorStudioRoute: CreatorStudioRoute,
+  ProductStudioRoute: ProductStudioRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
