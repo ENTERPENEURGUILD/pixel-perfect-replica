@@ -10,14 +10,28 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiRouteImport } from './routes/api'
 import { Route as BrandingStudioRouteImport } from './routes/branding-studio'
 import { Route as CampaignsRouteImport } from './routes/campaigns'
 import { Route as CreatorStudioRouteImport } from './routes/creator-studio'
+import { Route as ExploreRouteImport } from './routes/explore'
+import { Route as LibraryRouteImport } from './routes/library'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as ModelsRouteImport } from './routes/models'
+import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as ProductStudioRouteImport } from './routes/product-studio'
+import { Route as RecentRouteImport } from './routes/recent'
+import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as SignupRouteImport } from './routes/signup'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiRoute = ApiRouteImport.update({
+  id: '/api',
+  path: '/api',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BrandingStudioRoute = BrandingStudioRouteImport.update({
@@ -35,64 +49,167 @@ const CreatorStudioRoute = CreatorStudioRouteImport.update({
   path: '/creator-studio',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ExploreRoute = ExploreRouteImport.update({
+  id: '/explore',
+  path: '/explore',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LibraryRoute = LibraryRouteImport.update({
+  id: '/library',
+  path: '/library',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ModelsRoute = ModelsRouteImport.update({
+  id: '/models',
+  path: '/models',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PricingRoute = PricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProductStudioRoute = ProductStudioRouteImport.update({
   id: '/product-studio',
   path: '/product-studio',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RecentRoute = RecentRouteImport.update({
+  id: '/recent',
+  path: '/recent',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/api': typeof ApiRoute
   '/branding-studio': typeof BrandingStudioRoute
   '/campaigns': typeof CampaignsRoute
   '/creator-studio': typeof CreatorStudioRoute
+  '/explore': typeof ExploreRoute
+  '/library': typeof LibraryRoute
+  '/login': typeof LoginRoute
+  '/models': typeof ModelsRoute
+  '/pricing': typeof PricingRoute
   '/product-studio': typeof ProductStudioRoute
+  '/recent': typeof RecentRoute
+  '/settings': typeof SettingsRoute
+  '/signup': typeof SignupRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/api': typeof ApiRoute
   '/branding-studio': typeof BrandingStudioRoute
   '/campaigns': typeof CampaignsRoute
   '/creator-studio': typeof CreatorStudioRoute
+  '/explore': typeof ExploreRoute
+  '/library': typeof LibraryRoute
+  '/login': typeof LoginRoute
+  '/models': typeof ModelsRoute
+  '/pricing': typeof PricingRoute
   '/product-studio': typeof ProductStudioRoute
+  '/recent': typeof RecentRoute
+  '/settings': typeof SettingsRoute
+  '/signup': typeof SignupRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/api': typeof ApiRoute
   '/branding-studio': typeof BrandingStudioRoute
   '/campaigns': typeof CampaignsRoute
   '/creator-studio': typeof CreatorStudioRoute
+  '/explore': typeof ExploreRoute
+  '/library': typeof LibraryRoute
+  '/login': typeof LoginRoute
+  '/models': typeof ModelsRoute
+  '/pricing': typeof PricingRoute
   '/product-studio': typeof ProductStudioRoute
+  '/recent': typeof RecentRoute
+  '/settings': typeof SettingsRoute
+  '/signup': typeof SignupRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/api'
     | '/branding-studio'
     | '/campaigns'
     | '/creator-studio'
+    | '/explore'
+    | '/library'
+    | '/login'
+    | '/models'
+    | '/pricing'
     | '/product-studio'
+    | '/recent'
+    | '/settings'
+    | '/signup'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/api'
     | '/branding-studio'
     | '/campaigns'
     | '/creator-studio'
+    | '/explore'
+    | '/library'
+    | '/login'
+    | '/models'
+    | '/pricing'
     | '/product-studio'
+    | '/recent'
+    | '/settings'
+    | '/signup'
   id:
     | '__root__'
     | '/'
+    | '/api'
     | '/branding-studio'
     | '/campaigns'
     | '/creator-studio'
+    | '/explore'
+    | '/library'
+    | '/login'
+    | '/models'
+    | '/pricing'
     | '/product-studio'
+    | '/recent'
+    | '/settings'
+    | '/signup'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ApiRoute: typeof ApiRoute
   BrandingStudioRoute: typeof BrandingStudioRoute
   CampaignsRoute: typeof CampaignsRoute
   CreatorStudioRoute: typeof CreatorStudioRoute
+  ExploreRoute: typeof ExploreRoute
+  LibraryRoute: typeof LibraryRoute
+  LoginRoute: typeof LoginRoute
+  ModelsRoute: typeof ModelsRoute
+  PricingRoute: typeof PricingRoute
   ProductStudioRoute: typeof ProductStudioRoute
+  RecentRoute: typeof RecentRoute
+  SettingsRoute: typeof SettingsRoute
+  SignupRoute: typeof SignupRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -102,6 +219,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api': {
+      id: '/api'
+      path: '/api'
+      fullPath: '/api'
+      preLoaderRoute: typeof ApiRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/branding-studio': {
@@ -125,6 +249,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CreatorStudioRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/explore': {
+      id: '/explore'
+      path: '/explore'
+      fullPath: '/explore'
+      preLoaderRoute: typeof ExploreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/library': {
+      id: '/library'
+      path: '/library'
+      fullPath: '/library'
+      preLoaderRoute: typeof LibraryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/models': {
+      id: '/models'
+      path: '/models'
+      fullPath: '/models'
+      preLoaderRoute: typeof ModelsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pricing': {
+      id: '/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof PricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/product-studio': {
       id: '/product-studio'
       path: '/product-studio'
@@ -132,15 +291,45 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductStudioRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/recent': {
+      id: '/recent'
+      path: '/recent'
+      fullPath: '/recent'
+      preLoaderRoute: typeof RecentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ApiRoute: ApiRoute,
   BrandingStudioRoute: BrandingStudioRoute,
   CampaignsRoute: CampaignsRoute,
   CreatorStudioRoute: CreatorStudioRoute,
+  ExploreRoute: ExploreRoute,
+  LibraryRoute: LibraryRoute,
+  LoginRoute: LoginRoute,
+  ModelsRoute: ModelsRoute,
+  PricingRoute: PricingRoute,
   ProductStudioRoute: ProductStudioRoute,
+  RecentRoute: RecentRoute,
+  SettingsRoute: SettingsRoute,
+  SignupRoute: SignupRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
