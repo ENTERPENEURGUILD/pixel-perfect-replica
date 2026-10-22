@@ -15,12 +15,14 @@ import { Route as BrandingStudioRouteImport } from './routes/branding-studio'
 import { Route as CampaignsRouteImport } from './routes/campaigns'
 import { Route as CreatorStudioRouteImport } from './routes/creator-studio'
 import { Route as ExploreRouteImport } from './routes/explore'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as LibraryRouteImport } from './routes/library'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ModelsRouteImport } from './routes/models'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as ProductStudioRouteImport } from './routes/product-studio'
 import { Route as RecentRouteImport } from './routes/recent'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as SignupRouteImport } from './routes/signup'
 
@@ -54,6 +56,11 @@ const ExploreRoute = ExploreRouteImport.update({
   path: '/explore',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LibraryRoute = LibraryRouteImport.update({
   id: '/library',
   path: '/library',
@@ -84,6 +91,11 @@ const RecentRoute = RecentRouteImport.update({
   path: '/recent',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -102,12 +114,14 @@ export interface FileRoutesByFullPath {
   '/campaigns': typeof CampaignsRoute
   '/creator-studio': typeof CreatorStudioRoute
   '/explore': typeof ExploreRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/library': typeof LibraryRoute
   '/login': typeof LoginRoute
   '/models': typeof ModelsRoute
   '/pricing': typeof PricingRoute
   '/product-studio': typeof ProductStudioRoute
   '/recent': typeof RecentRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
 }
@@ -118,12 +132,14 @@ export interface FileRoutesByTo {
   '/campaigns': typeof CampaignsRoute
   '/creator-studio': typeof CreatorStudioRoute
   '/explore': typeof ExploreRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/library': typeof LibraryRoute
   '/login': typeof LoginRoute
   '/models': typeof ModelsRoute
   '/pricing': typeof PricingRoute
   '/product-studio': typeof ProductStudioRoute
   '/recent': typeof RecentRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
 }
@@ -135,12 +151,14 @@ export interface FileRoutesById {
   '/campaigns': typeof CampaignsRoute
   '/creator-studio': typeof CreatorStudioRoute
   '/explore': typeof ExploreRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/library': typeof LibraryRoute
   '/login': typeof LoginRoute
   '/models': typeof ModelsRoute
   '/pricing': typeof PricingRoute
   '/product-studio': typeof ProductStudioRoute
   '/recent': typeof RecentRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
 }
@@ -153,12 +171,14 @@ export interface FileRouteTypes {
     | '/campaigns'
     | '/creator-studio'
     | '/explore'
+    | '/forgot-password'
     | '/library'
     | '/login'
     | '/models'
     | '/pricing'
     | '/product-studio'
     | '/recent'
+    | '/reset-password'
     | '/settings'
     | '/signup'
   fileRoutesByTo: FileRoutesByTo
@@ -169,12 +189,14 @@ export interface FileRouteTypes {
     | '/campaigns'
     | '/creator-studio'
     | '/explore'
+    | '/forgot-password'
     | '/library'
     | '/login'
     | '/models'
     | '/pricing'
     | '/product-studio'
     | '/recent'
+    | '/reset-password'
     | '/settings'
     | '/signup'
   id:
@@ -185,12 +207,14 @@ export interface FileRouteTypes {
     | '/campaigns'
     | '/creator-studio'
     | '/explore'
+    | '/forgot-password'
     | '/library'
     | '/login'
     | '/models'
     | '/pricing'
     | '/product-studio'
     | '/recent'
+    | '/reset-password'
     | '/settings'
     | '/signup'
   fileRoutesById: FileRoutesById
@@ -202,12 +226,14 @@ export interface RootRouteChildren {
   CampaignsRoute: typeof CampaignsRoute
   CreatorStudioRoute: typeof CreatorStudioRoute
   ExploreRoute: typeof ExploreRoute
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
   LibraryRoute: typeof LibraryRoute
   LoginRoute: typeof LoginRoute
   ModelsRoute: typeof ModelsRoute
   PricingRoute: typeof PricingRoute
   ProductStudioRoute: typeof ProductStudioRoute
   RecentRoute: typeof RecentRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   SettingsRoute: typeof SettingsRoute
   SignupRoute: typeof SignupRoute
 }
@@ -256,6 +282,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ExploreRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/library': {
       id: '/library'
       path: '/library'
@@ -298,6 +331,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RecentRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/settings': {
       id: '/settings'
       path: '/settings'
@@ -322,12 +362,14 @@ const rootRouteChildren: RootRouteChildren = {
   CampaignsRoute: CampaignsRoute,
   CreatorStudioRoute: CreatorStudioRoute,
   ExploreRoute: ExploreRoute,
+  ForgotPasswordRoute: ForgotPasswordRoute,
   LibraryRoute: LibraryRoute,
   LoginRoute: LoginRoute,
   ModelsRoute: ModelsRoute,
   PricingRoute: PricingRoute,
   ProductStudioRoute: ProductStudioRoute,
   RecentRoute: RecentRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   SettingsRoute: SettingsRoute,
   SignupRoute: SignupRoute,
 }
