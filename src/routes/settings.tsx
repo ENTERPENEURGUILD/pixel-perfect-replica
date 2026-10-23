@@ -38,7 +38,6 @@ function Card({ title, children }: { title: string; children: React.ReactNode })
 
 function Settings() {
   const { user } = useSession();
-  const path = useRouterState({ select: (s) => s.location.pathname });
   const queryClient = useQueryClient();
 
   const [name, setName] = useState("");
