@@ -1,11 +1,10 @@
-import { createFileRoute, useRouterState } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { KeyRound, LogOut, Settings as SettingsIcon, UserRound } from "lucide-react";
+import { KeyRound, LogOut, Settings as SettingsIcon } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useSession } from "@/hooks/use-session";
-import { performSignOut } from "@/lib/auth-actions";
 import { EmptyState, Field, Page, PageHeader, inputClass, seo } from "@/components/app/ui-bits";
 
 export const Route = createFileRoute("/settings")({
@@ -97,10 +96,6 @@ function Settings() {
     setPassword("");
     setConfirm("");
     toast.success("Password updated");
-  };
-
-  const signOut = async () => {
-    await performSignOut(queryClient, path === "/settings" ? undefined! : undefined!);
   };
 
   return (
