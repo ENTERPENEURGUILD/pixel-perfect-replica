@@ -1,10 +1,13 @@
-import { Link, useRouterState } from "@tanstack/react-router";
+import { Link, useRouter, useRouterState } from "@tanstack/react-router";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState, type ReactNode } from "react";
 import {
+  ChevronDown,
   Clock,
   Image as ImageIcon,
   Layers,
   Library,
+  LogOut,
   Menu,
   Play,
   Settings,
@@ -13,6 +16,16 @@ import {
 } from "lucide-react";
 import logo from "@/assets/logo-mark.png";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useSession } from "@/hooks/use-session";
+import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
 
 const TOP_NAV = [
@@ -105,7 +118,7 @@ function SidebarNav({ path, onNavigate }: { path: string; onNavigate?: () => voi
 export function AppShell({ children }: { children: ReactNode }) {
   const path = useRouterState({ select: (s) => s.location.pathname });
   const [open, setOpen] = useState(false);
-  const bare = ["/login", "/signup", "/forgot-password"].includes(path);
+  const bare = ["/login", "/signup", "/forgot-password", "/reset-password"].includes(path);
 
   if (bare) return <>{children}</>;
 
@@ -162,23 +175,8 @@ export function AppShell({ children }: { children: ReactNode }) {
         </nav>
 
         <div className="ml-auto flex items-center gap-2">
-          <Link
-            to="/pricing"
-            className="hidden items-center gap-2 rounded-lg border px-3 py-2 text-sm sm:flex"
-            title="Sign in to see your balance"
-          >
-            <Zap className="size-4 text-primary" />
-            <span className="text-primary">0 credits</span>
-          </Link>
-          <Link to="/login" className="rounded-lg border px-3 py-2 text-sm hover:bg-card">
-            Log in
-          </Link>
-          <Link
-            to="/signup"
-            className="hidden rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90 sm:block"
-          >
-            Create account
-          </Link>
+          <CreditsChip />
+          <AccountMenu />
         </div>
       </header>
 
