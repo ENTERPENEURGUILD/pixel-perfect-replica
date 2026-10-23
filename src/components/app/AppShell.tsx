@@ -189,3 +189,116 @@ export function AppShell({ children }: { children: ReactNode }) {
     </div>
   );
 }
+
+function useProfile(userId: string | undefined) {
+  return useQuery({
+    queryKey: ["profile", userId],
+    enabled: Boolean(userId),
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("display_name, avatar_url, credits")
+        .eq("id", userId!)
+        .single();
+      if (error) throw error;
+      return data;
+    },
+  });
+}
+
+function initialsOf(name: string | null | undefined, email?: string | null) {
+  const source = name?.trim() || email || "L";
+  const parts = source.split(/[\s._@-]+/).filter(Boolean);
+  return (
+    parts
+      .slice(0, 2)
+      .map((p) => p[0]!.toUpperCase())
+      .join("") || "L"
+  );
+}
+
+function CreditsChip() {
+  const { user } = useSession();
+  const { data: profile } = useProfile(user?.id);
+  return (
+    <Link
+      to="/pricing"
+      className="hidden items-center gap-2 rounded-lg border px-3 py-2 text-sm sm:flex"
+      title={user ? "Your credit balance" : "Sign in to see your balance"}
+    >
+      <Zap className="size-4 text-primary" />
+      <span className="text-primary">
+        {user ? (profile ? `${profile.credits} credits` : "… credits") : "0 credits"}
+      </span>
+    </Link>
+  );
+}
+
+function AccountMenu() {
+  const { user } = useSession();
+  const queryClient = useQueryClient();
+  const router = useRouter();
+  const { data: profile } = useProfile(user?.id);
+
+  if (!user) {
+    return (
+      <>
+        <Link to="/login" className="rounded-lg border px-3 py-2 text-sm hover:bg-card">
+          Log in
+        </Link>
+        <Link
+          to="/signup"
+          className="hidden rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90 sm:block"
+        >
+          Create account
+        </Link>
+      </>
+    );
+  }
+
+  const email = user.email ?? "";
+  const label = profile?.display_name || email;
+  const initials = initialsOf(profile?.display_name, email);
+
+  const signOut = async () => {
+    await queryClient.cancelQueries();
+    queryClient.clear();
+    await supabase.auth.signOut();
+    await router.navigate({ to: "/login", replace: true });
+  };
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger
+        className="flex items-center gap-2 rounded-lg border px-2 py-1.5 text-sm hover:bg-card"
+        aria-label="Account menu"
+      >
+        <span className="grid size-7 place-items-center rounded-full bg-secondary text-xs font-bold text-primary">
+          {initials}
+        </span>
+        <span className="hidden max-w-32 truncate sm:block">{label}</span>
+        <ChevronDown className="size-4 text-muted-foreground" />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-56">
+        <DropdownMenuLabel>
+          <span className="block truncate">{label}</span>
+          <span className="block truncate text-xs font-normal text-muted-foreground">{email}</span>
+        </DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem asChild>
+          <Link to="/library">Library</Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link to="/recent">Recent Generations</Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link to="/settings">Settings</Link>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onSelect={() => void signOut()} className="gap-2 text-primary">
+          <LogOut className="size-4" /> Log out
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
