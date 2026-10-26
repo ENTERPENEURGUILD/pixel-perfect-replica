@@ -1,7 +1,9 @@
 /**
- * Model catalogue + pricing configuration (DEVELOPMENT DATA).
+ * Model catalogue + pricing configuration (DEVELOPMENT PRICING).
  * Single source of truth for model capabilities and credit costs in the UI.
- * The server must re-validate everything here before deducting credits.
+ * The server allowlist in src/lib/image-gateway.server.ts decides which ids
+ * actually reach the gateway; server must re-validate everything before
+ * deducting credits.
  */
 
 export type Quality = "low" | "medium" | "high";
@@ -10,6 +12,8 @@ export type ModelStatus = "available" | "not_connected" | "coming_soon";
 
 export interface ImageModel {
   id: string;
+  /** Exact model id on the Lovable AI Gateway, when the model is connected. */
+  gatewayModel?: string;
   name: string;
   provider: string;
   description: string;
@@ -32,6 +36,21 @@ export const RESOLUTION_MULTIPLIER: Record<Resolution, number> = {
 
 export const MODELS: ImageModel[] = [
   {
+    id: "gemini-3-pro-image",
+    gatewayModel: "google/gemini-3-pro-image",
+    name: "Gemini 3 Pro Image",
+    provider: "Google",
+    description: "Google's flagship image model — sharp detail and strong text rendering.",
+    capabilities: ["Text to image", "Image editing", "Text rendering"],
+    aspectRatios: ["1:1", "2:3", "3:2", "3:4", "4:3", "4:5", "5:4", "9:16", "16:9", "21:9"],
+    qualities: ["medium"],
+    resolutions: ["1K"],
+    maxImages: 4,
+    supportsReference: true,
+    baseCost: { medium: 2 },
+    status: "available",
+  },
+  {
     id: "gpt-image-2",
     name: "GPT Image 2",
     provider: "OpenAI",
@@ -43,20 +62,6 @@ export const MODELS: ImageModel[] = [
     maxImages: 4,
     supportsReference: true,
     baseCost: { low: 1, medium: 2, high: 4 },
-    status: "not_connected",
-  },
-  {
-    id: "nano-banana-2",
-    name: "Nano Banana 2",
-    provider: "Google",
-    description: "Fast, versatile generation with wide aspect ratio support.",
-    capabilities: ["Text to image", "Image editing", "Multi-reference"],
-    aspectRatios: ["1:1", "16:9", "9:16", "4:3", "3:4"],
-    qualities: ["medium"],
-    resolutions: ["1K", "2K", "4K"],
-    maxImages: 4,
-    supportsReference: true,
-    baseCost: { medium: 2 },
     status: "not_connected",
   },
   {

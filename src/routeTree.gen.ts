@@ -25,6 +25,8 @@ import { Route as RecentRouteImport } from './routes/recent'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as SignupRouteImport } from './routes/signup'
+import { Route as ApiEditImageRouteImport } from './routes/api/edit-image'
+import { Route as ApiGenerateImageRouteImport } from './routes/api/generate-image'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -106,10 +108,20 @@ const SignupRoute = SignupRouteImport.update({
   path: '/signup',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiEditImageRoute = ApiEditImageRouteImport.update({
+  id: '/edit-image',
+  path: '/edit-image',
+  getParentRoute: () => ApiRoute,
+} as any)
+const ApiGenerateImageRoute = ApiGenerateImageRouteImport.update({
+  id: '/generate-image',
+  path: '/generate-image',
+  getParentRoute: () => ApiRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/api': typeof ApiRoute
+  '/api': typeof ApiRouteWithChildren
   '/branding-studio': typeof BrandingStudioRoute
   '/campaigns': typeof CampaignsRoute
   '/creator-studio': typeof CreatorStudioRoute
@@ -124,10 +136,12 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
+  '/api/edit-image': typeof ApiEditImageRoute
+  '/api/generate-image': typeof ApiGenerateImageRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/api': typeof ApiRoute
+  '/api': typeof ApiRouteWithChildren
   '/branding-studio': typeof BrandingStudioRoute
   '/campaigns': typeof CampaignsRoute
   '/creator-studio': typeof CreatorStudioRoute
@@ -142,11 +156,13 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
+  '/api/edit-image': typeof ApiEditImageRoute
+  '/api/generate-image': typeof ApiGenerateImageRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/api': typeof ApiRoute
+  '/api': typeof ApiRouteWithChildren
   '/branding-studio': typeof BrandingStudioRoute
   '/campaigns': typeof CampaignsRoute
   '/creator-studio': typeof CreatorStudioRoute
@@ -161,6 +177,8 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
+  '/api/edit-image': typeof ApiEditImageRoute
+  '/api/generate-image': typeof ApiGenerateImageRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -181,6 +199,8 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/settings'
     | '/signup'
+    | '/api/edit-image'
+    | '/api/generate-image'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -199,6 +219,8 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/settings'
     | '/signup'
+    | '/api/edit-image'
+    | '/api/generate-image'
   id:
     | '__root__'
     | '/'
@@ -217,11 +239,13 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/settings'
     | '/signup'
+    | '/api/edit-image'
+    | '/api/generate-image'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  ApiRoute: typeof ApiRoute
+  ApiRoute: typeof ApiRouteWithChildren
   BrandingStudioRoute: typeof BrandingStudioRoute
   CampaignsRoute: typeof CampaignsRoute
   CreatorStudioRoute: typeof CreatorStudioRoute
@@ -352,12 +376,38 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SignupRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/edit-image': {
+      id: '/api/edit-image'
+      path: '/edit-image'
+      fullPath: '/api/edit-image'
+      preLoaderRoute: typeof ApiEditImageRouteImport
+      parentRoute: typeof ApiRoute
+    }
+    '/api/generate-image': {
+      id: '/api/generate-image'
+      path: '/generate-image'
+      fullPath: '/api/generate-image'
+      preLoaderRoute: typeof ApiGenerateImageRouteImport
+      parentRoute: typeof ApiRoute
+    }
   }
 }
 
+interface ApiRouteChildren {
+  ApiEditImageRoute: typeof ApiEditImageRoute
+  ApiGenerateImageRoute: typeof ApiGenerateImageRoute
+}
+
+const ApiRouteChildren: ApiRouteChildren = {
+  ApiEditImageRoute: ApiEditImageRoute,
+  ApiGenerateImageRoute: ApiGenerateImageRoute,
+}
+
+const ApiRouteWithChildren = ApiRoute._addFileChildren(ApiRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  ApiRoute: ApiRoute,
+  ApiRoute: ApiRouteWithChildren,
   BrandingStudioRoute: BrandingStudioRoute,
   CampaignsRoute: CampaignsRoute,
   CreatorStudioRoute: CreatorStudioRoute,
