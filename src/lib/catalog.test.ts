@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { estimateCost } from "./catalog";
+import { MODELS, estimateCost } from "./catalog";
 
 describe("estimateCost", () => {
   it("scales base cost by resolution and count", () => {
