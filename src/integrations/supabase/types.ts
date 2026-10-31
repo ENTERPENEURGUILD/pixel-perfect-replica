@@ -14,6 +14,36 @@ export type Database = {
   }
   public: {
     Tables: {
+      generations: {
+        Row: {
+          aspect: string | null
+          created_at: string
+          id: string
+          image_url: string
+          model_id: string
+          prompt: string
+          user_id: string
+        }
+        Insert: {
+          aspect?: string | null
+          created_at?: string
+          id?: string
+          image_url: string
+          model_id: string
+          prompt: string
+          user_id: string
+        }
+        Update: {
+          aspect?: string | null
+          created_at?: string
+          id?: string
+          image_url?: string
+          model_id?: string
+          prompt?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -46,7 +76,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      spend_credits: { Args: { cost: number }; Returns: undefined }
     }
     Enums: {
       [_ in never]: never

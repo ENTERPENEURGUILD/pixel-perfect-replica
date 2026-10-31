@@ -2,14 +2,6 @@ import { estimateCost, getModel } from "@/lib/catalog";
 import { streamImage } from "@/lib/stream-image";
 import { supabase } from "@/integrations/supabase/client";
 
-export interface GenerationResult {
-  id: number;
-  dataUrl: string;
-  final: boolean;
-  url?: string;
-  error?: string;
-}
-
 export interface RunGenerationOptions {
   modelId: string;
   prompt: string;
@@ -17,7 +9,17 @@ export interface RunGenerationOptions {
   count: number;
   reference: File | null;
   onFrame: (index: number, dataUrl: string, isFinal: boolean) => void;
-  onSaved: (index: number, url: string) => void;
+  /** Called with the storage path once the image is saved to the library. */
+  onSaved: (index: number, path: string) => void;
+}
+
+/**
+ * Signs a read URL for a file in the private "generations" bucket.
+ * Signed URLs stay valid for 7 days; refetch when one expires.
+ */
+export async function signedUrl(path: string): Promise<string | null> {
+  const { data } = await supabase.storage.from("generations").createSignedUrl(path, 604800);
+  return data?.signedUrl ?? null;
 }
 
 async function saveGeneration(
@@ -31,16 +33,15 @@ async function saveGeneration(
     .from("generations")
     .upload(path, blob, { contentType: "image/png" });
   if (uploadError) throw new Error(`Couldn't save to your library: ${uploadError.message}`);
-  const { data } = supabase.storage.from("generations").getPublicUrl(path);
   const { error: insertError } = await supabase.from("generations").insert({
     user_id: userId,
     prompt: opts.prompt,
     model_id: opts.modelId,
     aspect: opts.aspect,
-    image_url: data.publicUrl,
+    image_url: path,
   });
   if (insertError) throw new Error(`Couldn't save to your library: ${insertError.message}`);
-  return data.publicUrl;
+  return path;
 }
 
 /**
@@ -91,8 +92,8 @@ export async function runGeneration(opts: RunGenerationOptions): Promise<void> {
     }
 
     if (!lastDataUrl) throw new Error("Generation returned no image");
-    const url = await saveGeneration(userId, opts, lastDataUrl);
-    opts.onSaved(index, url);
+    const path = await saveGeneration(userId, opts, lastDataUrl);
+    opts.onSaved(index, path);
 
     if (perImageCost > 0) {
       const { error: spendError } = await supabase.rpc("spend_credits", { cost: perImageCost });

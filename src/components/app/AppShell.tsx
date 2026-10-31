@@ -1,5 +1,5 @@
 import { Link, useRouter, useRouterState } from "@tanstack/react-router";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { useState, type ReactNode } from "react";
 import {
   ChevronDown,
@@ -25,6 +25,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useSession } from "@/hooks/use-session";
+import { useProfile } from "@/hooks/use-profile";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
 
@@ -188,22 +189,6 @@ export function AppShell({ children }: { children: ReactNode }) {
       </div>
     </div>
   );
-}
-
-function useProfile(userId: string | undefined) {
-  return useQuery({
-    queryKey: ["profile", userId],
-    enabled: Boolean(userId),
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("display_name, avatar_url, credits")
-        .eq("id", userId!)
-        .single();
-      if (error) throw error;
-      return data;
-    },
-  });
 }
 
 function initialsOf(name: string | null | undefined, email?: string | null) {
