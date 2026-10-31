@@ -8,6 +8,13 @@
       "when": 1792672289952,
       "tag": "0000_create_profiles_with_trigger",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1793456090430,
+      "tag": "0001_generations_table_and_credits",
+      "breakpoints": true
     }
   ]
 }
