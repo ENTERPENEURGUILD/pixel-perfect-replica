@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
-import { Copy, ImagePlus, Layers3, Maximize, Monitor, Sparkles, X } from "lucide-react";
+import { Copy, Download, ImagePlus, Layers3, Loader2, Maximize, Monitor, Sparkles, X } from "lucide-react";
 import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "@tanstack/react-router";
 import {
   Select,
   SelectContent,
@@ -17,6 +19,17 @@ import {
   type Quality,
   type Resolution,
 } from "@/lib/catalog";
+import { runGeneration } from "@/lib/generation-client";
+import { useProfile } from "@/hooks/use-profile";
+import { useSession } from "@/hooks/use-session";
+import { cn } from "@/lib/utils";
+
+interface ResultSlot {
+  index: number;
+  dataUrl: string;
+  final: boolean;
+  savedPath?: string;
+}
 
 function Control({
   icon,
@@ -48,6 +61,45 @@ function Control({
   );
 }
 
+function ResultCard({ slot }: { slot: ResultSlot }) {
+  return (
+    <div className="group relative overflow-hidden rounded-2xl border bg-surface">
+      <div className="relative aspect-square">
+        <img
+          src={slot.dataUrl}
+          alt={slot.final ? "Generated image" : "Generating a preview"}
+          className={cn("absolute inset-0 size-full object-cover", !slot.final && "scale-105 blur-2xl")}
+        />
+        {!slot.final && (
+          <div className="absolute inset-0 grid place-items-center">
+            <span className="flex items-center gap-2 rounded-full bg-background/80 px-4 py-2 text-xs font-medium backdrop-blur">
+              <Loader2 className="size-4 animate-spin text-primary" />
+              Generating…
+            </span>
+          </div>
+        )}
+      </div>
+      {slot.final && (
+        <div className="flex items-center justify-between border-t px-3 py-2">
+          <span className="text-xs text-muted-foreground">
+            {slot.savedPath ? "Saved to Library" : "Saving…"}
+          </span>
+          {slot.savedPath && (
+            <a
+              href={slot.dataUrl}
+              download="litemile-studio.png"
+              className="flex items-center gap-1.5 text-xs font-semibold text-primary hover:underline"
+              aria-label="Download image"
+            >
+              <Download className="size-3.5" /> Download
+            </a>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export interface ComposerProps {
   placeholder?: string;
   defaultAspect?: string | undefined;
@@ -73,7 +125,13 @@ export function Composer({
   const [count, setCount] = useState(1);
   const [prompt, setPrompt] = useState("");
   const [reference, setReference] = useState<File | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [results, setResults] = useState<ResultSlot[]>([]);
   const fileRef = useRef<HTMLInputElement>(null);
+  const { user } = useSession();
+  const { data: profile } = useProfile(user?.id);
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   // Keep selections valid for the current model's real capabilities.
   useEffect(() => {
@@ -91,13 +149,59 @@ export function Composer({
   }, [modelId, quality, resolution, count, runs]);
 
   const onGenerate = () => {
+    if (busy) return;
     if (!prompt.trim()) {
       toast.error("Write a prompt first.");
       return;
     }
-    toast("Generation isn't connected yet", {
-      description: `${model.name} is ${STATUS_LABEL[model.status].toLowerCase()}. No image was created and no credits were used.`,
-    });
+    if (!model.gatewayModel || model.status !== "available") {
+      toast.error(`${model.name} isn't connected yet. Pick an available model.`);
+      return;
+    }
+    if (!user) {
+      toast.error("Sign in to generate images", {
+        description: "Create a free account — your credits and library are waiting.",
+      });
+      return;
+    }
+    if (cost !== null && profile && profile.credits < cost) {
+      toast.error(`Only ${profile.credits} credits left — this run costs ${cost}.`, {
+        description: "Top up on the pricing page to keep creating.",
+        action: { label: "Top up", onClick: () => void navigate({ to: "/pricing" }) },
+      });
+      return;
+    }
+    setBusy(true);
+    setResults([]);
+    void runGeneration({
+      modelId,
+      prompt: prompt.trim(),
+      aspect,
+      count,
+      reference,
+      onFrame: (index, dataUrl, isFinal) => {
+        setResults((prev) => {
+          const next = prev.filter((r) => r.index !== index);
+          next.push({ index, dataUrl, final: isFinal });
+          return next.sort((a, b) => a.index - b.index);
+        });
+      },
+      onSaved: (index, savedPath) => {
+        setResults((prev) =>
+          prev.map((r) => (r.index === index ? { ...r, savedPath } : r)),
+        );
+      },
+    })
+      .catch((error: unknown) => {
+        toast.error(error instanceof Error ? error.message : "Generation failed");
+      })
+      .finally(() => {
+        setBusy(false);
+        if (user) {
+          void queryClient.invalidateQueries({ queryKey: ["profile", user.id] });
+          void queryClient.invalidateQueries({ queryKey: ["generations", user.id] });
+        }
+      });
   };
 
   return (
@@ -195,15 +299,22 @@ export function Composer({
           disabled={cost === null}
           className="flex min-h-16 shrink-0 items-center justify-center gap-3 rounded-2xl bg-primary px-8 text-primary-foreground shadow-cta transition hover:opacity-90 disabled:opacity-50"
         >
-          <Sparkles className="size-5" />
+          {busy ? <Loader2 className="size-5 animate-spin" /> : <Sparkles className="size-5" />}
           <span className="text-left leading-tight">
-            <span className="block text-lg font-bold">Generate</span>
+            <span className="block text-lg font-bold">{busy ? "Generating" : "Generate"}</span>
             <span className="block text-xs opacity-75">
               {cost === null ? "Unavailable" : `${cost} credits`}
             </span>
           </span>
         </button>
       </div>
+      {results.length > 0 && (
+        <div className="mt-4 grid gap-4 sm:grid-cols-2">
+          {results.map((slot) => (
+            <ResultCard key={slot.index} slot={slot} />
+          ))}
+        </div>
+      )}
       <p className="mt-3 px-1 text-xs text-muted-foreground">
         {model.provider} · {STATUS_LABEL[model.status]} · Estimates use development pricing.
       </p>

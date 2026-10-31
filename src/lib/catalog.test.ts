@@ -12,7 +12,14 @@ describe("estimateCost", () => {
   });
 
   it("rejects qualities a model does not support", () => {
-    expect(estimateCost({ modelId: "nano-banana-2", quality: "high", resolution: "1K", count: 1 })).toBeNull();
+    expect(estimateCost({ modelId: "gemini-3-pro-image", quality: "high", resolution: "1K", count: 1 })).toBeNull();
+  });
+
+  it("charges the connected Google flagship 2 credits per medium 1K image", () => {
+    expect(estimateCost({ modelId: "gemini-3-pro-image", quality: "medium", resolution: "1K", count: 1 })).toBe(2);
+    expect(MODELS[0]!.id).toBe("gemini-3-pro-image");
+    expect(MODELS[0]!.gatewayModel).toBe("google/gemini-3-pro-image");
+    expect(MODELS[0]!.status).toBe("available");
   });
 
   it("rejects image counts above the model maximum", () => {
