@@ -7,7 +7,7 @@ import { AuthLayout, Divider, SocialButtons, submitClass } from "@/components/ap
 import { Field, inputClass, seo } from "@/components/app/ui-bits";
 
 export const Route = createFileRoute("/signup")({
-  head: () => seo("Sign up — Litemile Studio", "Create your Litemile Studio account."),
+  head: () => seo("Sign up — Litemile Studio", "Create your account and get 10 free credits to generate images."),
   component: Signup,
 });
 
@@ -71,7 +71,7 @@ function Signup() {
   return (
     <AuthLayout
       title="Create account"
-      subtitle="Start turning ideas into images."
+      subtitle="Start turning ideas into images — 10 free credits on us."
       footer={
         <>
           Already have an account?{" "}
