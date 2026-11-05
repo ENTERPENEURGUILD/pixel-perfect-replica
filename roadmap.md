@@ -8,3 +8,7 @@
 - [x] Library & Recent backed by the database — verified end-to-end
 - [ ] Razorpay credit purchases (from second document)
 - [ ] Image detail page
+- [ ] Buyer-owned provider connections: encrypted, account-isolated credentials and connection settings
+- [ ] Buyer-owned OpenAI, Gemini, Replicate/FLUX, and restricted custom image adapters
+- [ ] Buyer-owned Razorpay, Stripe, and PayPal checkout + verified payment fulfillment
+- [ ] Litemile-owned Razorpay and Stripe credit checkout + verified webhook fulfillment
