@@ -1,5 +1,12 @@
 # Roadmap
 
+## Ownership handover polish
+
+- [ ] Replace starter README with an owner-ready overview, setup notes, verified flows, and known gaps
+- [ ] Make Settings, Pricing, and API status copy accurate; show real profile loading/error states
+- [ ] Audit studio controls for inputs that look active but do not affect generation
+- [ ] Run relevant tests and preview smoke checks before handover
+
 - [x] App shell, home image page, four creative studios
 - [x] Content pages: Explore, Models, Pricing, API
 - [x] Accounts: Lovable Cloud, signup/login/forgot/reset, profiles, session-aware header, settings
