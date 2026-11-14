@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { KeyRound, LogOut, Settings as SettingsIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useSession } from "@/hooks/use-session";
 import { EmptyState, Field, Page, PageHeader, inputClass, seo } from "@/components/app/ui-bits";
@@ -46,7 +47,8 @@ function Settings() {
   const [confirm, setConfirm] = useState("");
   const [savingPassword, setSavingPassword] = useState(false);
 
-  const { data: profile } = useOwnProfile(user?.id ?? "");
+  const { data: profile, isPending: profilePending, isError: profileError, refetch: refetchProfile } =
+    useOwnProfile(user?.id ?? "");
 
   useEffect(() => {
     if (profile?.display_name) setName(profile.display_name);
@@ -103,6 +105,14 @@ function Settings() {
 
       <div className="grid gap-6 lg:grid-cols-2">
         <Card title="Profile">
+          {profileError && (
+            <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-l-2 border-destructive px-3 py-2">
+              <p className="text-sm text-muted-foreground">Profile details couldn’t be loaded.</p>
+              <Button type="button" variant="outline" size="sm" onClick={() => void refetchProfile()}>
+                Try again
+              </Button>
+            </div>
+          )}
           <form onSubmit={saveName} className="flex flex-col gap-4">
             <Field label="Display name" htmlFor="display-name">
               <input
@@ -173,7 +183,7 @@ function Settings() {
             <div className="flex justify-between gap-4">
               <dt className="text-muted-foreground">Credits</dt>
               <dd className="text-primary">
-                {profile ? `${profile.credits} credits` : "Loading..."}
+                {profile ? `${profile.credits} credits` : profilePending ? "Loading…" : "Unavailable"}
               </dd>
             </div>
           </dl>

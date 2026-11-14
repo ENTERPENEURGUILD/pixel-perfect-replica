@@ -11,6 +11,16 @@ export const Route = createFileRoute("/product-studio")({
 function ProductStudio() {
   const [lighting, setLighting] = useState("Studio softbox");
   const [style, setStyle] = useState("Luxury");
+  const [scene, setScene] = useState("");
+  const [composition, setComposition] = useState("Hero centered");
+  const promptContext = [
+    scene.trim() ? `Background and scene: ${scene.trim()}` : "",
+    `Composition: ${composition}`,
+    `Lighting: ${lighting}`,
+    `Visual style: ${style}`,
+  ]
+    .filter(Boolean)
+    .join("\n");
   return (
     <Page>
       <PageHeader
@@ -18,12 +28,23 @@ function ProductStudio() {
         title="Product Studio"
         subtitle="Place your product in any scene with controlled lighting and composition."
       />
-      <Composer placeholder="Describe the scene around your product..." defaultAspect="1:1">
+      <Composer placeholder="Describe the scene around your product..." defaultAspect="1:1" promptContext={promptContext}>
         <Field label="Background & scene" htmlFor="scene">
-          <input id="scene" className={inputClass} placeholder="Wet black rocks, soft mist" maxLength={200} />
+          <input
+            id="scene"
+            className={inputClass}
+            placeholder="Wet black rocks, soft mist"
+            maxLength={200}
+            value={scene}
+            onChange={(event) => setScene(event.target.value)}
+          />
         </Field>
         <Field label="Composition">
-          <Chips options={["Hero centered", "Flat lay", "Close-up", "Lifestyle"]} value="Hero centered" onChange={() => {}} />
+          <Chips
+            options={["Hero centered", "Flat lay", "Close-up", "Lifestyle"]}
+            value={composition}
+            onChange={setComposition}
+          />
         </Field>
         <Field label="Lighting">
           <Chips options={["Studio softbox", "Golden hour", "Rim light", "Neon"]} value={lighting} onChange={setLighting} />
