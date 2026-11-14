@@ -103,6 +103,8 @@ function ResultCard({ slot }: { slot: ResultSlot }) {
 export interface ComposerProps {
   placeholder?: string;
   defaultAspect?: string | undefined;
+  /** Extra studio settings included with the user's prompt. */
+  promptContext?: string;
   /** Multiplies the per-run cost (e.g. number of campaign assets). */
   runs?: number;
   /** Additional fields rendered above the prompt. */
@@ -113,6 +115,7 @@ export interface ComposerProps {
 export function Composer({
   placeholder = "Describe the image you want to create...",
   defaultAspect,
+  promptContext = "",
   runs = 1,
   children,
   showReference = true,
@@ -173,9 +176,10 @@ export function Composer({
     }
     setBusy(true);
     setResults([]);
+    const completePrompt = [prompt.trim(), promptContext.trim()].filter(Boolean).join("\n\n");
     void runGeneration({
       modelId,
-      prompt: prompt.trim(),
+      prompt: completePrompt,
       aspect,
       count,
       reference,
