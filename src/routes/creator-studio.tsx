@@ -18,10 +18,23 @@ const PLATFORMS: Record<string, string> = {
 function CreatorStudio() {
   const [platform, setPlatform] = useState("YouTube thumbnail");
   const [style, setStyle] = useState("High energy");
+  const [headline, setHeadline] = useState("");
+  const promptContext = [
+    `Format: ${platform}`,
+    `Visual style: ${style}`,
+    headline.trim() ? `Headline text to include: ${headline.trim()}` : "",
+  ]
+    .filter(Boolean)
+    .join("\n");
   return (
     <Page>
       <PageHeader eyebrow="Studio" title="Creator Studio" subtitle="Scroll-stopping visuals sized for every platform." />
-      <Composer key={platform} placeholder="Describe the scene for your content..." defaultAspect={PLATFORMS[platform]}>
+      <Composer
+        key={platform}
+        placeholder="Describe the scene for your content..."
+        defaultAspect={PLATFORMS[platform]}
+        promptContext={promptContext}
+      >
         <Field label="Platform">
           <Chips options={Object.keys(PLATFORMS)} value={platform} onChange={setPlatform} />
         </Field>
@@ -29,7 +42,14 @@ function CreatorStudio() {
           <Chips options={["High energy", "Clean", "Cinematic", "Illustrated"]} value={style} onChange={setStyle} />
         </Field>
         <Field label="Headline text" htmlFor="hl">
-          <input id="hl" className={inputClass} placeholder="Text to show on the image" maxLength={60} />
+          <input
+            id="hl"
+            className={inputClass}
+            placeholder="Text to show on the image"
+            maxLength={60}
+            value={headline}
+            onChange={(event) => setHeadline(event.target.value)}
+          />
         </Field>
       </Composer>
       <p className="mt-4 text-sm text-muted-foreground">
