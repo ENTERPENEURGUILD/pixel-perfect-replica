@@ -5,6 +5,7 @@
 - [ ] Complete owner-ready SaaS scope: platform billing, provider connections, secure tenant isolation, launch setup, and verified handover docs
 - [x] Confirm billing model: monthly plans plus one-time credit top-ups
 - [ ] Keep live payments and provider generation marked incomplete until owner credentials and provider test flows are verified
+- [ ] Payment setup is blocked: owner does not have a Razorpay account; Stripe account and test credentials are not yet confirmed
 
 ## Ownership handover polish
 
