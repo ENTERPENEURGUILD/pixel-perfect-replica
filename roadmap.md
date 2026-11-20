@@ -3,7 +3,7 @@
 ## SaaS handover
 
 - [ ] Complete owner-ready SaaS scope: platform billing, provider connections, secure tenant isolation, launch setup, and verified handover docs
-- [ ] Confirm billing model; use prepaid credits as the working default until answered
+- [x] Confirm billing model: monthly plans plus one-time credit top-ups
 - [ ] Keep live payments and provider generation marked incomplete until owner credentials and provider test flows are verified
 
 ## Ownership handover polish
